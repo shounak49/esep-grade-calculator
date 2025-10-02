@@ -1,9 +1,20 @@
-﻿## Part 3 — Updating Code and Tests
+﻿## Part 4 — Adding Tests
 
-### 3.1 Diagnosis
-- Wrong assertion: TestGetGradeF expected "F" while inputs (100,95,91) return "A". This was changed with 50/35/15 weights.
-- Code changes:Code bugs from starter: essays averaged from wrong slice; average loop summed index not value; potential divide-by-zero; numeric truncated.
+### 4.1 Coverage after fixes
+- Command: `go test -coverprofile="coverage.out" ./...`
+- Coverage result: 
+PS C:\Users\sjosh\esep-grade-calculator\grade-calculator> go test -coverprofile="coverage.out" ./...
+ok      esep/grade-calculator   0.449s  coverage: 100.0% of statements
 
-### 3.2 Fixes
-- Implemented float64 numeric pipeline with weights 50/35/15; corrected essays and averaging; safe handling
-- Updated TestGetGradeF inputs to yield F; A/B tests unchanged.
+### 4.2 New tests added to reach 100% coverage
+- Added explicit **C** and **D** cases (exact cutoffs at 70 and 60).
+- Boundary checks at **60/70/80/90**.
+- Multiple items per category to verify the **averaging** logic.
+- **Missing categories count as 0**: only assignments, only exams, only essays, and **no grades** cases.
+- Covered the `GradeType.String()` mapping.
+
+### 4.3 Refactor thoughts
+- Keep calculation as **pure functions**; compare raw numeric, no rounding in logic.
+- **Separate data collection** (`AddGrade`) from **computation** (`calculateNumericalGrade`).
+- Make the **missing-category policy** configurable.
+- Prefer **small, single-purpose helpers** with clear return types. This will help with coverage.
