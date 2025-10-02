@@ -8,10 +8,10 @@
 - Package name: esepunittests
 
 ### 2.2 Brief summary of each file (4 total)
-- go.mod — Declares module; enables Go modules.
-- README.md — Setup/usage notes
-- grade_calculator.go — Library code for adding grades and computing weighted letter grades (A/B/C/D/F) using 50/35/15.
-- grade_calculator_test.go — Unit tests for expected letters given sample inputs (A, B, F cases).
+- go.mod: Declares module; enables Go modules.
+- README.md: Setup/usage notes
+- grade_calculator.go: Library code for adding grades and computing weighted letter grades (A/B/C/D/F) using 50/35/15.
+- grade_calculator_test.go: Unit tests for expected letters given sample inputs (A, B, F cases).
 
 ### 2.3 Are there tests in the repository?
 Yes.
