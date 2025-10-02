@@ -38,10 +38,10 @@ func TestGetGradeF(t *testing.T) {
 	expected_value := "F"
 
 	gradeCalculator := NewGradeCalculator()
-
-	gradeCalculator.AddGrade("open source assignment", 100, Assignment)
-	gradeCalculator.AddGrade("exam 1", 95, Exam)
-	gradeCalculator.AddGrade("essay on ai ethics", 91, Essay)
+	// switched for specifications
+	gradeCalculator.AddGrade("open source assignment", 50, Assignment)
+	gradeCalculator.AddGrade("exam 1", 55, Exam)
+	gradeCalculator.AddGrade("essay on ai ethics", 58, Essay)
 
 	actual_value := gradeCalculator.GetFinalGrade()
 

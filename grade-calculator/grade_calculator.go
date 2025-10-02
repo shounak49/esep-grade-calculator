@@ -39,60 +39,62 @@ func NewGradeCalculator() *GradeCalculator {
 }
 
 func (gc *GradeCalculator) GetFinalGrade() string {
-	numericalGrade := gc.calculateNumericalGrade()
+	n := gc.calculateNumericalGrade() // compare without rounding
 
-	if numericalGrade >= 90 {
+	switch {
+	case n >= 90.0:
 		return "A"
-	} else if numericalGrade >= 80 {
+	case n >= 80.0:
 		return "B"
-	} else if numericalGrade >= 70 {
+	case n >= 70.0:
 		return "C"
-	} else if numericalGrade >= 60 {
+	case n >= 60.0:
 		return "D"
+	default:
+		return "F"
 	}
-
-	return "F"
 }
 
 func (gc *GradeCalculator) AddGrade(name string, grade int, gradeType GradeType) {
+	g := Grade{Name: name, Grade: grade, Type: gradeType}
 	switch gradeType {
 	case Assignment:
-		gc.assignments = append(gc.assignments, Grade{
-			Name:  name,
-			Grade: grade,
-			Type:  Assignment,
-		})
+		gc.assignments = append(gc.assignments, g)
 	case Exam:
-		gc.exams = append(gc.exams, Grade{
-			Name:  name,
-			Grade: grade,
-			Type:  Exam,
-		})
+		gc.exams = append(gc.exams, g)
 	case Essay:
-		gc.essays = append(gc.essays, Grade{
-			Name:  name,
-			Grade: grade,
-			Type:  Essay,
-		})
+		gc.essays = append(gc.essays, g)
 	}
 }
 
-func (gc *GradeCalculator) calculateNumericalGrade() int {
-	assignment_average := computeAverage(gc.assignments)
-	exam_average := computeAverage(gc.exams)
-	essay_average := computeAverage(gc.exams)
+// Weights: Assignments 50%, Exams 35%, Essays 15%.
+func (gc *GradeCalculator) calculateNumericalGrade() float64 {
+	const wA, wE, wS = 0.50, 0.35, 0.15
 
-	weighted_grade := float64(assignment_average)*.5 + float64(exam_average)*.35 + float64(essay_average)*.15
+	a, aOK := computeAverage(gc.assignments)
+	e, eOK := computeAverage(gc.exams)
+	s, sOK := computeAverage(gc.essays) // correct: essays!
 
-	return int(weighted_grade)
-}
-
-func computeAverage(grades []Grade) int {
-	sum := 0
-
-	for grade, _ := range grades {
-		sum += grade
+	if !aOK {
+		a = 0
+	}
+	if !eOK {
+		e = 0
+	}
+	if !sOK {
+		s = 0
 	}
 
-	return sum / len(grades)
+	return wA*a + wE*e + wS*s
+}
+
+func computeAverage(grades []Grade) (float64, bool) {
+	if len(grades) == 0 {
+		return 0, false
+	}
+	sum := 0.0
+	for _, g := range grades {
+		sum += float64(g.Grade)
+	}
+	return sum / float64(len(grades)), true
 }
